@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tisnaantzo — AI Prompt Collection</title>
+  <meta name="description" content="Koleksi visual AI lengkap dengan prompt aslinya. Klik untuk copy prompt." />
+  <meta name="author" content="Tisnaantzo" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface2: #1a1a1a;
+      --surface3: #222222;
+      --border: rgba(255,255,255,0.07);
+      --border-h: rgba(255,255,255,0.15);
+      --text: #f2f2f2;
+      --muted: #666;
+      --muted2: #999;
+      --accent: #c8f542;
+      --accent2: #aadd1e;
+      --accent-dim: rgba(200,245,66,0.12);
+      --accent-glow: rgba(200,245,66,0.25);
+      --red: #ff4444;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 56px;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .nav-logo-mark {
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 14px;
+      color: #0a0a0a;
+      letter-spacing: 0;
+      flex-shrink: 0;
+    }
+    .nav-logo-text {
+      font-family: var(--font-display);
+      font-size: 20px;
+      color: var(--text);
+      letter-spacing: 2px;
+    }
+    .nav-logo-text span { color: var(--accent); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 52px 20px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      border: 1px solid rgba(200,245,66,0.3);
+      padding: 5px 10px;
+      border-radius: 3px;
+      background: var(--accent-dim);
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: blink 1.8s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(68px, 18vw, 110px);
+      line-height: 0.92;
+      letter-spacing: 2px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .hero-title .line2 {
+      color: var(--accent);
+      display: block;
+      -webkit-text-stroke: 0px;
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--muted2);
+      max-width: 320px;
+      margin: 20px 0 28px;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    /* stats bar */
+    .hero-stats {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 32px;
+      padding: 14px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 28px;
+      color: var(--text);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-family: var(--font-mono);
+    }
+    .stat-div {
+      width: 1px;
+      background: var(--border);
+      align-self: stretch;
+    }
+
+    /* coffee */
+    .coffee-wrap { position: relative; display: inline-block; }
+    .coffee-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border-h);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 11px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .coffee-btn:hover { background: var(--surface3); border-color: var(--accent); color: var(--accent); }
+    .coffee-btn .arrow { font-size: 9px; transition: transform 0.2s; color: var(--muted); }
+    .coffee-btn.open .arrow { transform: rotate(180deg); }
+
+    .coffee-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      background: var(--surface);
+      border: 1px solid var(--border-h);
+      border-radius: 8px;
+      padding: 6px;
+      min-width: 170px;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 50;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.6);
+    }
+    .coffee-dropdown.open { display: flex; }
+    .coffee-dropdown a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 9px 12px;
+      border-radius: 5px;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+    .coffee-dropdown a:hover { background: var(--surface2); }
+
+    /* poem */
+    .coffee-poem {
+      margin-top: 20px;
+      padding: 14px 16px;
+      border-left: 2px solid var(--accent);
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 2;
+      font-style: italic;
+      max-width: 340px;
+    }
+
+    /* ── FILTER ── */
+    .filter-section {
+      padding: 0 20px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .filter-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .filter-heading {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .count-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--muted);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 3px;
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .filter-pills::-webkit-scrollbar { display: none; }
+
+    .pill {
+      flex-shrink: 0;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted2);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 16px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+    }
+    .pill:hover { border-color: var(--border-h); color: var(--text); }
+    .pill.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0a0a0a;
+      font-weight: 700;
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+    .pill:active { transform: scale(0.93); }
+
+    /* hero subtitle */
+    .hero-subtitle {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.3em;
+      color: var(--muted2);
+      margin-top: 6px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    /* nav logo override */
+    .nav-logo-text span { color: var(--accent); }
+
+    /* card active press */
+    .card:active { transform: scale(0.97) translateY(0) !important; }
+
+    /* copy btn press */
+    .copy-btn:active { transform: scale(0.9); }
+    .btn-copy-full:active { transform: scale(0.97); }
+    .coffee-btn:active { transform: scale(0.97); }
+    .pill { transition: all 0.18s cubic-bezier(0.34,1.56,0.64,1); }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      margin-bottom: 20px;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--border); }
+    .divider-text {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ── GRID ── */
+    .gallery-section {
+      padding: 0 20px 80px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    @media (min-width: 640px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; } }
+    @media (min-width: 1024px) { .gallery-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+      animation: fadeUp 0.45s ease both;
+      position: relative;
+    }
+    .card:hover {
+      border-color: var(--border-h);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .card:active { transform: scale(0.98); }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+    .card-img-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      background: var(--surface2);
+    }
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .card:hover .card-img-wrap img { transform: scale(1.06); }
+
+    /* overlay gradient */
+    .card-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.3) 40%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* LIHAT PROMPT button inside image */
+    .card-cta {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      z-index: 2;
+      background: var(--accent);
+      color: #0a0a0a;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+    }
+    .card:hover .card-cta {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .card-body {
+      padding: 10px 12px 12px;
+    }
+
+    .card-tool-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .card-tool-badge {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(200,245,66,0.2);
+      padding: 2px 7px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .copy-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-btn.copied { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+    .card-title {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    /* empty state */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--muted);
+    }
+    .empty-state-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(12px);
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border-h);
+      border-radius: 20px 20px 0 0;
+      width: 100%;
+      max-width: 600px;
+      max-height: 92vh;
+      overflow-y: auto;
+      transform: translateY(40px);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+
+    .modal-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--surface3);
+      border-radius: 2px;
+      margin: 12px auto 0;
+    }
+
+    .modal-img-wrap {
+      position: relative;
+      overflow: hidden;
+      max-height: 320px;
+    }
+    .modal-img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      max-height: 320px;
+    }
+    .modal-img-gradient {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(to top, var(--surface), transparent);
+    }
+
+    .modal-body { padding: 20px 20px 32px; }
+
+    .modal-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .modal-tool-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(200,245,66,0.25);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      letter-spacing: 1px;
+      line-height: 1.05;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .modal-prompt-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 8px;
+    }
+
+    .modal-prompt-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted2);
+      line-height: 1.9;
+      margin-bottom: 16px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .modal-actions { display: flex; gap: 10px; }
+
+    .btn-copy-full {
+      flex: 1;
+      background: var(--accent);
+      border: none;
+      color: #0a0a0a;
+      font-family: var(--font-display);
+      font-size: 16px;
+      letter-spacing: 1px;
+      padding: 14px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-copy-full:hover { background: var(--accent2); }
+    .btn-copy-full:active { transform: scale(0.98); }
+    .btn-copy-full.copied { background: #1a3a05; color: var(--accent); }
+
+    .btn-close {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted2);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 14px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-close:hover { border-color: var(--border-h); color: var(--text); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 20px;
+    }
+    .footer-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      gap: 20px;
+    }
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: var(--text);
+    }
+    .footer-brand span { color: var(--accent); }
+    .footer-tagline {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+    }
+    .footer-links a {
+      color: var(--muted2);
+      text-decoration: none;
+      font-size: 12px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .footer-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: var(--accent);
+      color: #0a0a0a;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 11px 20px;
+      border-radius: 100px;
+      z-index: 300;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">TZ</div>
+    <div class="nav-logo-text">tisna<span>antzo</span></div>
+  </a>
+  <div class="nav-right">
+    <span class="nav-tag">AI PROMPTS</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Prompt Collection</div>
+  <h1 class="hero-title">
+    ATC
+    <span class="line2">CREATIVE</span>
+  </h1>
+  <div class="hero-subtitle">PROMPT COLLECTION</div>
+  <p class="hero-sub">Koleksi visual AI lengkap dengan prompt aslinya. Klik kartu untuk lihat & copy prompt secara penuh.</p>
+
+  <div class="hero-stats" id="heroStats">
+    <div class="stat">
+      <div class="stat-num" id="statTotal">0</div>
+      <div class="stat-label">Prompts</div>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat">
+      <div class="stat-num" id="statImg">0</div>
+      <div class="stat-label">Dengan Gambar</div>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat">
+      <div class="stat-num" id="statCat">5</div>
+      <div class="stat-label">Kategori</div>
+    </div>
+  </div>
+
+  <div class="coffee-wrap">
+    <button class="coffee-btn" id="coffeeBtn">
+      ☕ Traktir Kopi <span class="arrow">▾</span>
+    </button>
+    <div class="coffee-dropdown" id="coffeeDropdown">
+      <a href="https://saweria.co/tisnaantzo" target="_blank">🟡 Saweria</a>
+      <a href="https://ko-fi.com/tisnaantzo" target="_blank">☕ Ko-fi</a>
+      <a href="https://trakteer.id/tisnaantzo/tip" target="_blank">❤️ Trakteer</a>
+    </div>
+  </div>
+
+  <div class="coffee-poem">
+    Hujan turun di sore hari,<br/>
+    Tanah basah semerbak wangi.<br/>
+    Kalau konten ini jadi inspirasi,<br/>
+    Bolehlah secangkir kopi jadi tanda hati 🙏
+  </div>
+</section>
+
+<!-- FILTER -->
+<div class="filter-section">
+  <div class="filter-label-row">
+    <span class="filter-heading">// Filter Kategori</span>
+    <span class="count-badge" id="countBadge">0 item</span>
+  </div>
+  <div class="filter-pills">
+    <button class="pill active" data-filter="all">Semua</button>
+    <button class="pill" data-filter="Chatgpt">ChatGPT</button>
+    <button class="pill" data-filter="Gemini">Gemini</button>
+    <button class="pill" data-filter="Midjourney">Midjourney</button>
+    <button class="pill" data-filter="Flux">Flux Pro</button>
+    <button class="pill" data-filter="Firefly">Firefly</button>
+    <button class="pill" data-filter="Ideogram">Ideogram</button>
+    <button class="pill" data-filter="Stable Diffusion">Stable Diff</button>
+    <button class="pill" data-filter="Leonardo">Leonardo</button>
+    <button class="pill" data-filter="Kling">Kling</button>
+    <button class="pill" data-filter="Runway">Runway</button>
+  </div>
+</div>
+
+<div class="section-divider">
+  <div class="divider-line"></div>
+  <div class="divider-text">tisnaantzo Library</div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-img-wrap">
+      <img src="" alt="" id="modalImg" class="modal-img" />
+      <div class="modal-img-gradient"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-meta">
+        <div class="modal-tool-badge" id="modalToolBadge"></div>
+      </div>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-prompt-label">// FULL PROMPT</div>
+      <div class="modal-prompt-box" id="modalPrompt"></div>
+      <div class="modal-actions">
+        <button class="btn-copy-full" id="btnCopyFull">COPY PROMPT</button>
+        <button class="btn-close" id="btnClose">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Prompt berhasil disalin!</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">tisna<span>antzo</span></div>
+      <div class="footer-tagline">AI Visual & Prompt Assets</div>
+    </div>
+    <nav class="footer-links">
+      <a href="#">Home</a>
+      <a href="#">Projects</a>
+      <a href="#">About</a>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 TISNAANTZO — ALL RIGHTS RESERVED</div>
+    <div class="footer-dot"></div>
+  </div>
+</footer>
+
+<script>
+  // ── DATA — Ambil dari localStorage admin (tz_data), fallback ke data default ──
+  const FALLBACK_ITEMS = [
+    { id:1, category:'travel', title:'Bali Sunset Poster', tool:'Midjourney v6.1', img:'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=600&q=80', tags:['Travel Poster','AI'], prompt:'A cinematic travel poster of Bali at golden hour sunset, silhouette of temple against dramatic orange-pink sky, rice terraces in foreground, vintage travel aesthetic, film grain, letterpress typography "BALI" at top, warm tones, high contrast, photorealistic, editorial style --ar 2:3 --v 6.1 --style raw' },
+    { id:2, category:'streetwear', title:'Urban Streetwear Lookbook', tool:'Flux Pro 1.1', img:'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=600&q=80', tags:['Streetwear','AI'], prompt:'Editorial fashion photography, young Indonesian male model wearing oversized graphic hoodie and cargo pants, urban Jakarta background with graffiti walls, moody dramatic lighting, desaturated cinematic colors, street photography style, shot on film, authentic gritty aesthetic, 4k resolution --ar 3:4' },
+    { id:3, category:'portrait', title:'Analog Portrait Session', tool:'Midjourney v6.1', img:'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80', tags:['Portrait','AI'], prompt:'Film photography portrait of Southeast Asian woman, natural light from window, analog film grain, Kodak Portra 400 aesthetic, soft bokeh background, candid expression, warm color grading, medium format camera feel, authentic intimate moment, no filters, raw emotion --ar 4:5 --v 6 --style raw --q 2' },
+    { id:4, category:'travel', title:'Tokyo Night Poster', tool:'Adobe Firefly', img:'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80', tags:['Travel Poster','AI'], prompt:'Neon-lit Tokyo at night, rain-soaked streets reflecting neon signs, cyberpunk aesthetic, overhead shot of Shinjuku crossing, vivid cyan and magenta color palette, long exposure light trails, cinematic anamorphic lens flare, Japanese text on signs, moody and atmospheric, poster format --ar 2:3' },
+    { id:5, category:'nature', title:'Raja Ampat Aerial', tool:'Ideogram v2', img:'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=600&q=80', tags:['Nature','AI'], prompt:'Stunning aerial drone shot of Raja Ampat islands Indonesia, crystal clear turquoise water, limestone karst islands covered in dense jungle, overwater bungalow in distance, golden hour lighting, perfectly flat water with reflections, paradise tropical destination, ultra sharp details, Google Earth aesthetic --ar 16:9' },
+    { id:6, category:'abstract', title:'Liquid Chrome Sculpture', tool:'Midjourney v6.1', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80', tags:['Abstract','AI'], prompt:'Hyperrealistic liquid chrome mercury sculpture on black marble surface, dramatic studio lighting, perfect reflections, surreal organic form, high contrast, product photography style, glossy finish, 8k resolution, studio white backdrop, luxury aesthetic, premium material feel --ar 1:1 --v 6.1 --q 2' },
+    { id:7, category:'streetwear', title:'Jogja Batik Fusion', tool:'Stable Diffusion XL', img:'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80', tags:['Streetwear','AI'], prompt:'Contemporary fashion editorial, Indonesian model wearing modern streetwear with traditional batik pattern integration, Prambanan temple background, golden hour, Vogue magazine aesthetic, high fashion photography, dramatic poses, luxury brand feel, cultural fusion concept, professionally lit --ar 3:4' },
+    { id:8, category:'nature', title:'Bromo Volcano Dawn', tool:'Midjourney v6.1', img:'https://images.unsplash.com/photo-1540276048-ca2ecdbf5c36?w=600&q=80', tags:['Nature','AI'], prompt:'Mount Bromo at dawn, sea of clouds below crater rim, dramatic volcanic landscape East Java Indonesia, warm golden first light, silhouette of local farmers on horseback, ethereal misty atmosphere, wide angle landscape photography, epic scale, National Geographic style, ultra detailed, 8k --ar 16:9 --style raw' },
+    { id:9, category:'abstract', title:'Neon Geometry Burst', tool:'Flux Pro 1.1', img:'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&q=80', tags:['Abstract','AI'], prompt:'Abstract digital art, exploding geometric shapes, neon color spectrum on deep black background, mathematical precision, sacred geometry patterns, glowing edges with lens flare, cyberpunk palette cyan magenta yellow, motion blur, high energy composition, cover art aesthetic, 4k resolution --ar 1:1' },
+    { id:10, category:'portrait', title:'Wayang Shadow Portrait', tool:'Ideogram v2', img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80', tags:['Portrait','AI'], prompt:'Dramatic portrait inspired by Indonesian wayang shadow puppet aesthetics, man in profile with strong geometric jawline, dramatic side lighting creating sharp shadows, traditional Javanese batik fabric as background, high contrast black and white with selective red accent color, artistic cultural fusion portrait --ar 4:5' },
+    { id:11, category:'travel', title:'Sumatra Jungle Poster', tool:'Midjourney v6.1', img:'https://images.unsplash.com/photo-1588392382834-a891154bca4d?w=600&q=80', tags:['Travel Poster','AI'], prompt:'Vintage adventure travel poster of Sumatra jungle, orangutan in dense rainforest canopy, lush tropical greens, retro 1960s poster design style, limited color palette, bold typography "WILD SUMATRA", screen print texture, conservation message, artistic illustration style, warm earthy tones --ar 2:3' },
+    { id:12, category:'nature', title:'Komodo Dragon Dusk', tool:'Adobe Firefly', img:'https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=600&q=80', tags:['Nature','AI'], prompt:'Komodo dragon on rocky hillside at dusk, golden backlight creating dramatic silhouette, Komodo island Indonesia background, wildlife photography aesthetic, telephoto compression, dust particles visible in golden light, epic prehistoric atmosphere, David Attenborough documentary feel, cinematic wide shot --ar 16:9 --style raw' }
+  ];
+
+  function adminToGallery(adminItem) {
+    const catMap = {
+      'Chatgpt': 'abstract', 'Gemini': 'abstract',
+      'Midjourney': 'abstract', 'Flux': 'abstract',
+      'Firefly': 'abstract', 'Ideogram': 'abstract',
+      'Stable Diffusion': 'abstract', 'Leonardo': 'abstract',
+      'Kling': 'abstract', 'Runway': 'abstract',
+      'Canva': 'abstract', 'Other': 'abstract'
+    };
+    return {
+      id: adminItem.id,
+      category: adminItem.category || catMap[adminItem.cat] || 'abstract',
+      title: adminItem.title,
+      tool: adminItem.cat || adminItem.tool || '',
+      img: adminItem.img || '',
+      tags: [adminItem.cat || adminItem.tool || 'AI', 'AI'],
+      prompt: adminItem.prompt
+    };
+  }
+
+  function loadItems() {
+    try {
+      const raw = localStorage.getItem('tz_data');
+      if (raw) {
+        const adminData = JSON.parse(raw);
+        if (Array.isArray(adminData) && adminData.length > 0) {
+          return adminData.map(adminToGallery);
+        }
+      }
+    } catch(e) {}
+    return FALLBACK_ITEMS;
+  }
+
+  let items = loadItems();
+  let activeFilter = 'all';
+  const grid = document.getElementById('galleryGrid');
+
+  function updateStats(filtered) {
+    document.getElementById('statTotal').textContent = items.length;
+    document.getElementById('statImg').textContent = items.filter(i => i.img).length;
+    document.getElementById('countBadge').textContent = filtered.length + ' item';
+  }
+
+  function renderCards(filter) {
+    items = loadItems();
+    const filtered = filter === 'all' ? items : items.filter(i => (i.tool||'').toLowerCase().includes(filter.toLowerCase()) || (i.cat||'').toLowerCase().includes(filter.toLowerCase()));
+    grid.innerHTML = '';
+    updateStats(filtered);
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">🎨</div>
+          <p>Belum ada konten di kategori ini.</p>
+        </div>`;
+      return;
+    }
+
+    filtered.forEach((item, idx) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.animationDelay = `${idx * 0.05}s`;
+      card.dataset.id = item.id;
+      const imgHtml = item.img
+        ? `<img src="${item.img}" alt="${item.title}" loading="lazy" />`
+        : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:var(--surface2);">🖼️</div>`;
+      card.innerHTML = `
+        <div class="card-img-wrap">
+          ${imgHtml}
+          <button class="card-cta" data-id="${item.id}">👁 LIHAT PROMPT</button>
+        </div>
+        <div class="card-body">
+          <div class="card-tool-row">
+            <span class="card-tool-badge">${item.tool}</span>
+            <button class="copy-btn" data-id="${item.id}">COPY</button>
+          </div>
+          <div class="card-title">${item.title}</div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    grid.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.classList.contains('copy-btn')) return;
+        if (e.target.classList.contains('card-cta')) return;
+        openModal(parseInt(card.dataset.id));
+      });
+    });
+    grid.querySelectorAll('.card-cta').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openModal(parseInt(btn.dataset.id));
+      });
+    });
+    grid.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const item = items.find(i => i.id === parseInt(btn.dataset.id));
+        if (item) copyToClipboard(item.prompt, btn);
+      });
+    });
+  }
+
+  renderCards('all');
+
+  // ── FILTER ──
+  document.querySelectorAll('.pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      renderCards(activeFilter);
+    });
+  });
+
+  // ── MODAL ──
+  const overlay = document.getElementById('modalOverlay');
+  const modalImg = document.getElementById('modalImg');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalPrompt = document.getElementById('modalPrompt');
+  const modalToolBadge = document.getElementById('modalToolBadge');
+  const btnCopyFull = document.getElementById('btnCopyFull');
+
+  function openModal(id) {
+    const item = items.find(i => i.id === id);
+    if (!item) return;
+    modalImg.src = item.img;
+    modalImg.alt = item.title;
+    modalImg.style.display = item.img ? 'block' : 'none';
+    modalTitle.textContent = item.title;
+    modalPrompt.textContent = item.prompt;
+    modalToolBadge.textContent = '🛠 ' + item.tool;
+    btnCopyFull.textContent = 'COPY PROMPT';
+    btnCopyFull.className = 'btn-copy-full';
+    btnCopyFull.onclick = () => copyToClipboard(item.prompt, btnCopyFull, true);
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  document.getElementById('btnClose').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ── COPY ──
+  function copyToClipboard(text, btn, isModal = false) {
+    navigator.clipboard.writeText(text).then(() => {
+      if (isModal) {
+        btn.textContent = '✓ BERHASIL DISALIN!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'COPY PROMPT'; btn.classList.remove('copied'); }, 2000);
+      } else {
+        const orig = btn.textContent;
+        btn.textContent = '✓';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+      }
+      showToast();
+    });
+  }
+
+  function showToast() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ── COFFEE ──
+  const coffeeBtn = document.getElementById('coffeeBtn');
+  const coffeeDropdown = document.getElementById('coffeeDropdown');
+  coffeeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    coffeeBtn.classList.toggle('open');
+    coffeeDropdown.classList.toggle('open');
+  });
+  document.addEventListener('click', () => {
+    coffeeBtn.classList.remove('open');
+    coffeeDropdown.classList.remove('open');
+  });
+
+  // ── SYNC ──
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'tz_data') {
+      items = loadItems();
+      renderCards(activeFilter);
+    }
+  });
+</script>
+</body>
+</html>

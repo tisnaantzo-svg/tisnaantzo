@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin — tisnaantzo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#111113;
+  --panel:#18181c;
+  --surface:#202024;
+  --surface2:#2a2a30;
+  --border:rgba(255,255,255,0.08);
+  --border2:rgba(255,255,255,0.14);
+  --text:#f0eff4;
+  --muted:#888898;
+  --accent:#c8f542;
+  --accent-dim:rgba(200,245,66,0.1);
+  --accent-border:rgba(200,245,66,0.28);
+  --danger:#ff5252;
+  --danger-dim:rgba(255,82,82,0.12);
+  --info:#5b9cf6;
+  --info-dim:rgba(91,156,246,0.12);
+  --success:#4ade80;
+  --font:'DM Sans',sans-serif;
+  --mono:'DM Mono',monospace;
+  --display:'Syne',sans-serif;
+  --nav-h:64px;
+  --header-h:56px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh;padding-bottom:var(--nav-h);}
+
+/* LOGIN */
+#loginWrap{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;padding:24px;}
+.login-box{background:var(--panel);border:1px solid var(--border2);border-radius:20px;padding:36px 28px;width:100%;max-width:340px;}
+.login-logo{font-family:var(--display);font-size:22px;font-weight:800;margin-bottom:4px;}
+.login-logo b{color:var(--accent);}
+.login-sub{color:var(--muted);font-size:12px;margin-bottom:28px;}
+.lbl{display:block;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.linput{width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:14px;padding:11px 13px;border-radius:10px;outline:none;margin-bottom:14px;transition:border .2s;}
+.linput:focus{border-color:var(--accent);}
+.lbtn{width:100%;background:var(--accent);border:none;color:#111;font-family:var(--display);font-size:14px;font-weight:800;padding:13px;border-radius:10px;cursor:pointer;margin-top:4px;transition:background .15s;}
+.lbtn:hover{background:#b5e030;}
+.lerr{color:var(--danger);font-size:12px;margin-top:10px;text-align:center;display:none;}
+
+/* APP */
+#app{display:none;flex-direction:column;min-height:100vh;}
+#app.show{display:flex;}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--border);height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 16px;}
+.header-title{font-family:var(--display);font-size:17px;font-weight:800;}
+.header-right{display:flex;gap:8px;align-items:center;}
+.header-logo{font-family:var(--display);font-size:15px;font-weight:800;}
+.header-logo b{color:var(--accent);}
+
+/* BOTTOM NAV */
+.bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--panel);border-top:1px solid var(--border);height:var(--nav-h);display:flex;align-items:stretch;}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--muted);font-size:10px;font-weight:600;letter-spacing:.04em;border:none;background:none;transition:color .15s;padding:8px 0;}
+.bnav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.bnav-item.active{color:var(--accent);}
+
+/* PAGES */
+.page{display:none;flex:1;flex-direction:column;}
+.page.show{display:flex;}
+
+/* ── GALLERY PAGE ── */
+.gal-topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;gap:10px;}
+.gal-topbar-title{font-family:var(--display);font-size:17px;font-weight:800;}
+.btn-add{display:inline-flex;align-items:center;gap:6px;background:#3b82f6;color:#fff;font-family:var(--font);font-size:13px;font-weight:600;padding:9px 16px;border-radius:10px;border:none;cursor:pointer;transition:background .15s;}
+.btn-add:hover{background:#2563eb;}
+
+/* COL HEADER */
+.col-header{display:grid;grid-template-columns:50px 1fr 90px 90px 100px;gap:8px;padding:8px 16px;border-bottom:1px solid var(--border);border-top:1px solid var(--border);background:var(--panel);}
+.col-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+
+/* LIST */
+.item-list{flex:1;overflow-y:auto;}
+.item-row{display:grid;grid-template-columns:50px 1fr 90px 90px 100px;gap:8px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);transition:background .12s;}
+.item-row:hover{background:var(--surface);}
+.item-thumb{width:50px;height:50px;border-radius:8px;object-fit:cover;background:var(--surface2);display:block;border:1px solid var(--border);}
+.item-thumb-ph{width:50px;height:50px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
+.item-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;line-height:1.3;}
+.item-prompt{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+.cat-badge{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:5px;white-space:nowrap;display:inline-block;}
+.cat-chatgpt{background:rgba(16,163,127,.15);color:#10a37f;}
+.cat-gemini{background:rgba(66,133,244,.15);color:#4285f4;}
+.cat-midj{background:rgba(139,92,246,.15);color:#a78bfa;}
+.cat-flux{background:rgba(245,166,35,.15);color:#f5a623;}
+.cat-firefly{background:rgba(255,68,0,.15);color:#ff6b35;}
+.cat-sd{background:rgba(236,72,153,.15);color:#ec4899;}
+.cat-leo{background:rgba(234,179,8,.15);color:#eab308;}
+.cat-other{background:var(--surface2);color:var(--muted);}
+.item-prompt-cell{min-width:0;font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.action-cell{display:flex;gap:5px;align-items:center;}
+.btn-edit{padding:5px 11px;border-radius:7px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:var(--font);font-size:11px;font-weight:600;cursor:pointer;transition:background .12s,border-color .12s;}
+.btn-edit:hover{background:var(--surface);border-color:var(--border2);}
+.btn-del{padding:5px 11px;border-radius:7px;background:var(--danger-dim);border:1px solid rgba(255,82,82,.25);color:var(--danger);font-family:var(--font);font-size:11px;font-weight:600;cursor:pointer;transition:background .12s;}
+.btn-del:hover{background:rgba(255,82,82,.2);}
+
+.empty-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center;}
+.empty-ico{font-size:40px;margin-bottom:12px;opacity:.4;}
+.empty-t{font-family:var(--display);font-size:16px;font-weight:700;margin-bottom:6px;}
+.empty-s{font-size:13px;color:var(--muted);}
+
+/* SEARCH */
+.search-wrap{padding:10px 16px;border-bottom:1px solid var(--border);}
+.search-input{width:100%;background:var(--surface);border:1px solid var(--border2);color:var(--text);font-family:var(--font);font-size:13px;padding:9px 12px 9px 36px;border-radius:10px;outline:none;transition:border .2s;}
+.search-input:focus{border-color:var(--accent);}
+.search-wrap{position:relative;}
+.search-ico{position:absolute;left:28px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
+
+/* ── DASHBOARD ── */
+.dash-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;}
+.stat-c{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;}
+.stat-lbl{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.stat-val{font-family:var(--display);font-size:30px;font-weight:800;color:var(--accent);}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.dash-section{padding:0 16px 12px;font-family:var(--display);font-size:14px;font-weight:700;}
+.dash-recent{flex:1;padding:0 16px;}
+.dash-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.dash-row:last-child{border-bottom:none;}
+.dash-thumb{width:42px;height:42px;border-radius:7px;object-fit:cover;background:var(--surface2);border:1px solid var(--border);flex-shrink:0;}
+.dash-info{flex:1;min-width:0;}
+.dash-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dash-tool{font-size:11px;color:var(--muted);}
+
+/* ── BOTTOM SHEET / DRAWER ── */
+.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.sheet-overlay.open{opacity:1;pointer-events:all;}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:110;background:var(--panel);border-radius:20px 20px 0 0;border-top:1px solid var(--border2);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);display:flex;flex-direction:column;max-height:92vh;}
+.sheet-overlay.open .sheet{transform:translateY(0);}
+.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:12px auto 0;}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);}
+.sheet-title{font-family:var(--display);font-size:16px;font-weight:800;}
+.sheet-close{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:var(--surface2);border:none;color:var(--muted);font-size:18px;cursor:pointer;}
+.sheet-body{flex:1;overflow-y:auto;padding:16px 20px;}
+.sheet-foot{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:10px;padding-bottom:max(12px,env(safe-area-inset-bottom));}
+.sheet-foot .btn{flex:1;justify-content:center;}
+
+/* FORM */
+.fg{margin-bottom:14px;}
+.flbl{display:block;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.flbl span{color:var(--accent);}
+.finput,.fsel,.ftxt{width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:var(--font);font-size:13px;padding:10px 12px;border-radius:10px;outline:none;transition:border .2s,box-shadow .2s;-webkit-appearance:none;}
+.finput:focus,.fsel:focus,.ftxt:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim);}
+.fsel option{background:var(--surface2);}
+.ftxt{resize:vertical;min-height:110px;font-family:var(--mono);font-size:12px;line-height:1.7;}
+.fhint{font-size:11px;color:var(--muted);margin-top:5px;}
+
+/* Upload area */
+.upload-area{border:2px dashed var(--border2);border-radius:12px;padding:24px;text-align:center;cursor:pointer;position:relative;transition:border-color .2s,background .2s;}
+.upload-area:hover{border-color:var(--accent);background:var(--accent-dim);}
+.upload-area.has-img{border-style:solid;border-color:var(--accent-border);padding:0;overflow:hidden;}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.upload-ico{font-size:28px;margin-bottom:6px;opacity:.5;}
+.upload-txt{font-size:13px;color:var(--muted);}
+.img-prev{width:100%;height:180px;object-fit:cover;display:block;border-radius:10px;}
+.img-rmv{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.7);color:#fff;border:none;border-radius:6px;font-size:11px;padding:4px 10px;cursor:pointer;}
+.or-line{display:flex;align-items:center;gap:8px;margin:10px 0;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.or-line::before,.or-line::after{content:'';flex:1;height:1px;background:var(--border);}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-size:13px;font-weight:600;padding:10px 18px;border-radius:10px;cursor:pointer;border:none;transition:background .15s,transform .1s;}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--accent);color:#111;}
+.btn-primary:hover{background:#b5e030;}
+.btn-ghost{background:var(--surface2);color:var(--muted);border:1px solid var(--border2);}
+.btn-ghost:hover{color:var(--text);}
+
+/* CONFIRM */
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .2s;}
+.confirm-overlay.open{opacity:1;pointer-events:all;}
+.confirm-box{background:var(--panel);border:1px solid var(--border2);border-radius:16px;padding:28px 24px;max-width:300px;width:100%;transform:scale(.95);transition:transform .2s;}
+.confirm-overlay.open .confirm-box{transform:scale(1);}
+.ci{font-size:30px;margin-bottom:10px;}
+.ct{font-family:var(--display);font-size:17px;font-weight:800;margin-bottom:8px;}
+.cs{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.ca{display:flex;gap:10px;}
+.ca .btn{flex:1;justify-content:center;}
+.btn-danger{background:var(--danger-dim);color:var(--danger);border:1px solid rgba(255,82,82,.3);}
+.btn-danger:hover{background:rgba(255,82,82,.22);}
+
+/* TOAST */
+.toasts{position:fixed;bottom:calc(var(--nav-h) + 10px);left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:6px;align-items:center;}
+.toast{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:10px 18px;font-size:13px;font-weight:500;white-space:nowrap;animation:tst .25s ease, tfade .3s ease 2s forwards;}
+.toast.ok{border-color:rgba(74,222,128,.3);color:var(--success);}
+.toast.err{border-color:rgba(255,82,82,.3);color:var(--danger);}
+@keyframes tst{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tfade{to{opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginWrap">
+  <div class="login-box">
+    <div class="login-logo">tisna<b>antzo</b></div>
+    <div class="login-sub">Admin Panel · Masuk untuk lanjut</div>
+    <label class="lbl">Username</label>
+    <input class="linput" id="lUser" type="text" placeholder="admin" autocomplete="username"/>
+    <label class="lbl">Password</label>
+    <input class="linput" id="lPass" type="password" placeholder="••••••••" autocomplete="current-password"/>
+    <button class="lbtn" onclick="doLogin()">Masuk →</button>
+    <div class="lerr" id="lErr">Username atau password salah!</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-logo">tisna<b>antzo</b></div>
+    <div class="header-right">
+      <button onclick="doLogout()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:6px;">Keluar</button>
+    </div>
+  </div>
+
+  <!-- PAGES -->
+
+  <!-- DASHBOARD -->
+  <div class="page show" id="pg-dashboard">
+    <div class="gal-topbar">
+      <div class="gal-topbar-title">Dashboard</div>
+      <button class="btn-add" onclick="openSheet()">+ Tambah Item</button>
+    </div>
+    <div class="dash-stats">
+      <div class="stat-c">
+        <div class="stat-lbl">Total Konten</div>
+        <div class="stat-val" id="dTotal">0</div>
+        <div class="stat-sub">Prompt tersimpan</div>
+      </div>
+      <div class="stat-c">
+        <div class="stat-lbl">Dengan Gambar</div>
+        <div class="stat-val" style="color:var(--info)" id="dImg">0</div>
+        <div class="stat-sub">Punya visual</div>
+      </div>
+    </div>
+    <div class="dash-section">Konten Terbaru</div>
+    <div class="dash-recent" id="dashRecent"></div>
+  </div>
+
+  <!-- GALLERY / KELOLA -->
+  <div class="page" id="pg-gallery">
+    <div class="gal-topbar">
+      <div class="gal-topbar-title">Gallery Prompt</div>
+      <button class="btn-add" onclick="openSheet()">+ Tambah Item</button>
+    </div>
+    <div class="search-wrap">
+      <svg class="search-ico" width="15" height="15" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" id="searchQ" placeholder="   Cari judul atau prompt..." oninput="renderList()"/>
+    </div>
+    <div class="col-header">
+      <div class="col-lbl">Gambar</div>
+      <div class="col-lbl">Judul</div>
+      <div class="col-lbl">Kategori</div>
+      <div class="col-lbl">Prompt</div>
+      <div class="col-lbl">Aksi</div>
+    </div>
+    <div class="item-list" id="itemList"></div>
+    <div class="empty-wrap" id="emptyWrap" style="display:none;">
+      <div class="empty-ico">📭</div>
+      <div class="empty-t">Belum ada konten</div>
+      <div class="empty-s">Tap "+ Tambah Item" untuk mulai</div>
+    </div>
+  </div>
+
+  <!-- PROFIL / SETTINGS -->
+  <div class="page" id="pg-profil">
+    <div class="gal-topbar"><div class="gal-topbar-title">Profil & Pengaturan</div></div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:12px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">☁️ Cloudinary Config</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Isi sesuai akun Cloudinary kamu</div>
+        <div class="fg" style="margin-bottom:10px;">
+          <label class="flbl">Cloud Name</label>
+          <input class="finput" id="cldName" placeholder="Contoh: dxyz1234abc" style="font-family:var(--mono);font-size:13px;"/>
+        </div>
+        <div class="fg" style="margin-bottom:10px;">
+          <label class="flbl">Upload Preset</label>
+          <input class="finput" id="cldPreset" placeholder="Contoh: tisnaantzo_upload" style="font-family:var(--mono);font-size:13px;"/>
+        </div>
+        <div id="cldStatus" style="font-size:11px;margin-bottom:10px;display:none;padding:7px 10px;border-radius:7px;border:1px solid;"></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="saveCldConfig()">Simpan Config</button>
+          <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="testCldConnection()">🔌 Test Koneksi</button>
+        </div>
+      </div>
+        <input class="finput" id="np1" type="password" placeholder="Password baru (min. 6 karakter)" style="margin-bottom:10px;"/>
+        <input class="finput" id="np2" type="password" placeholder="Konfirmasi password"/>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px;" onclick="changePass()">Simpan Password</button>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Export Data</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <button class="btn btn-ghost" style="justify-content:center;" onclick="copyExport()">📋 Copy JSON ke Clipboard</button>
+          <button class="btn btn-ghost" style="justify-content:center;" onclick="downloadJSON()">⬇ Download data.json</button>
+          <button class="btn btn-danger" style="width:100%;justify-content:center;margin-top:4px;" onclick="askClear()">🗑 Hapus Semua Data</button>
+        </div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Cara Pakai</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.9;">
+          1. Tambah konten lewat tombol <b style="color:var(--text)">+ Tambah Item</b><br>
+          2. Isi judul, kategori, tools AI, dan prompt<br>
+          3. Upload gambar atau paste link URL<br>
+          4. Klik <b style="color:var(--text)">Simpan</b><br>
+          5. Export JSON → paste ke <code style="font-family:var(--mono);background:var(--surface2);padding:1px 5px;border-radius:4px;">galleryprompt.html</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottomnav">
+    <button class="bnav-item active" id="bn-dashboard" onclick="switchPage('dashboard')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </button>
+    <button class="bnav-item" id="bn-profil" onclick="switchPage('profil')">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profil
+    </button>
+  </nav>
+</div>
+
+<!-- BOTTOM SHEET FORM -->
+<div class="sheet-overlay" id="sheetOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title" id="sheetTitle">Tambah Item</div>
+      <button class="sheet-close" onclick="closeSheet()">×</button>
+    </div>
+    <div class="sheet-body">
+      <input type="hidden" id="fId"/>
+      <div class="fg">
+        <label class="flbl">Judul <span>*</span></label>
+        <input class="finput" id="fTitle" placeholder="Contoh: Bali Sunset Poster"/>
+      </div>
+      <div class="fg">
+        <label class="flbl">Tools AI <span>*</span></label>
+        <select class="fsel" id="fCat">
+          <option value="">-- Pilih Tools AI --</option>
+          <option value="Chatgpt">ChatGPT / DALL·E</option>
+          <option value="Gemini">Gemini (Google)</option>
+          <option value="Midjourney">Midjourney</option>
+          <option value="Flux">Flux Pro</option>
+          <option value="Firefly">Adobe Firefly</option>
+          <option value="Ideogram">Ideogram</option>
+          <option value="Stable Diffusion">Stable Diffusion</option>
+          <option value="Leonardo">Leonardo AI</option>
+          <option value="Kling">Kling AI</option>
+          <option value="Runway">Runway ML</option>
+          <option value="Canva">Canva AI</option>
+          <option value="Other">Lainnya</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="flbl">Kategori Gallery <span>*</span></label>
+        <select class="fsel" id="fCategory">
+          <option value="">-- Pilih Kategori --</option>
+          <option value="travel">Travel Poster</option>
+          <option value="streetwear">Streetwear</option>
+          <option value="portrait">Portrait</option>
+          <option value="nature">Nature</option>
+          <option value="abstract">Abstract</option>
+        </select>
+        <div class="fhint">Dipakai untuk filter di halaman Gallery Prompt</div>
+      </div>
+      <div class="fg">
+        <label class="flbl">Prompt <span>*</span></label>
+        <textarea class="ftxt" id="fPrompt" placeholder="Tulis prompt lengkap di sini..."></textarea>
+      </div>
+      <div class="fg">
+        <label class="flbl">Gambar</label>
+        <div class="upload-area" id="uploadArea">
+          <input type="file" id="fileInp" accept="image/*" onchange="onFileChange(event)"/>
+          <div id="uploadPh">
+            <div class="upload-ico">☁️</div>
+            <div class="upload-txt">Tap untuk upload ke Cloudinary</div>
+            <div class="fhint" style="margin-top:4px;">JPG / PNG / WEBP · Max 10MB · Auto-tersimpan di cloud</div>
+          </div>
+          <div id="prevWrap" style="display:none;position:relative;">
+            <img id="imgPrev" class="img-prev" alt="preview"/>
+            <button class="img-rmv" onclick="removeImg(event)">✕ Hapus</button>
+          </div>
+        </div>
+        <div id="uploadStatusBadge" style="display:none;align-items:center;gap:6px;font-size:12px;font-weight:600;margin-top:8px;padding:7px 12px;border-radius:8px;border:1px solid;background:var(--surface2);"></div>
+        <div class="or-line">atau</div>
+        <input class="finput" id="fImgUrl" placeholder="Paste link gambar (https://...)" oninput="previewUrl()"/>
+        <div class="fhint">Atau paste URL dari Cloudinary, ImgBB, Unsplash, dll.</div>
+      </div>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn btn-ghost" onclick="closeSheet()">Batal</button>
+      <button class="btn btn-primary" onclick="saveItem()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="confirm-overlay" id="confOverlay">
+  <div class="confirm-box">
+    <div class="ci">🗑️</div>
+    <div class="ct">Hapus Konten?</div>
+    <div class="cs">Konten ini akan dihapus permanen.</div>
+    <div class="ca">
+      <button class="btn btn-ghost" onclick="closeConf()">Batal</button>
+      <button class="btn btn-danger" onclick="confirmDel()">Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM CLEAR ALL -->
+<div class="confirm-overlay" id="confClearOverlay">
+  <div class="confirm-box">
+    <div class="ci">⚠️</div>
+    <div class="ct">Hapus Semua?</div>
+    <div class="cs">Semua data konten akan dihapus permanen dan tidak bisa dikembalikan.</div>
+    <div class="ca">
+      <button class="btn btn-ghost" onclick="closeClearConf()">Batal</button>
+      <button class="btn btn-danger" onclick="confirmClear()">Hapus Semua</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+// ── CLOUDINARY CONFIG ──
+const CLD = {
+  cloudName:    'CLOUD_NAME_KAMU',      // ← ganti dengan Cloud Name kamu
+  uploadPreset: 'tisnaantzo_upload'     // ← ganti dengan nama Upload Preset kamu
+};
+
+async function uploadToCloudinary(file) {
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLD.uploadPreset);
+  fd.append('folder', 'tisnaantzo');
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLD.cloudName}/image/upload`,
+    { method: 'POST', body: fd }
+  );
+  const data = await res.json();
+  if (data.secure_url) return data.secure_url;
+  throw new Error(data.error?.message || 'Upload gagal');
+}
+
+// ── AUTH ──
+let storedPass = localStorage.getItem('tz_pass') || 'tisna123';
+
+function doLogin(){
+  const u = document.getElementById('lUser').value.trim();
+  const p = document.getElementById('lPass').value;
+  if(u==='admin' && p===storedPass){
+    document.getElementById('loginWrap').style.display='none';
+    document.getElementById('app').classList.add('show');
+    refresh();
+  } else {
+    const el=document.getElementById('lErr');
+    el.style.display='block';
+    setTimeout(()=>el.style.display='none',2500);
+  }
+}
+document.getElementById('lPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('lUser').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+function doLogout(){
+  document.getElementById('app').classList.remove('show');
+  document.getElementById('loginWrap').style.display='flex';
+  document.getElementById('lPass').value='';
+}
+function changePass(){
+  const a=document.getElementById('np1').value, b=document.getElementById('np2').value;
+  if(a.length<6){toast('Min. 6 karakter!','err');return;}
+  if(a!==b){toast('Password tidak cocok!','err');return;}
+  storedPass=a; localStorage.setItem('tz_pass',a);
+  document.getElementById('np1').value=''; document.getElementById('np2').value='';
+  toast('Password diubah!','ok');
+}
+
+// ── DATA ──
+const DEFAULTS=[
+  {id:1,title:'Lost in Trend',cat:'Chatgpt',img:'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=300&q=70',prompt:'Create a stylized travel poster with street fashion aesthetic, urban Jakarta vibes, bold typography...'},
+  {id:2,title:'Street Style Arts',cat:'Chatgpt',img:'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=300&q=70',prompt:'Use the uploaded image as reference. Full-body fashion editorial street style...'},
+  {id:3,title:'Streetwear Yellow Doodle',cat:'Chatgpt',img:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=70',prompt:'Ultra realistic artistic doodle streetwear concept, yellow tones, graffiti background...'},
+];
+function getData(){const r=localStorage.getItem('tz_data');return r?JSON.parse(r):[...DEFAULTS];}
+function setData(d){localStorage.setItem('tz_data',JSON.stringify(d));}
+function nextId(){const d=getData();return d.length?Math.max(...d.map(i=>i.id))+1:1;}
+
+// ── NAV ──
+let curPage='dashboard';
+function switchPage(p){
+  curPage=p;
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('show'));
+  document.querySelectorAll('.bnav-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('pg-'+p).classList.add('show');
+  document.getElementById('bn-'+p).classList.add('active');
+  if(p==='gallery')renderList();
+  if(p==='dashboard')renderDash();
+  if(p==='profil')loadCldConfig();
+}
+
+// ── RENDER DASH ──
+function renderDash(){
+  const d=getData();
+  document.getElementById('dTotal').textContent=d.length;
+  document.getElementById('dImg').textContent=d.filter(i=>i.img).length;
+  const recent=[...d].reverse().slice(0,8);
+  document.getElementById('dashRecent').innerHTML=recent.length?recent.map(i=>`
+    <div class="dash-row">
+      ${i.img?`<img class="dash-thumb" src="${i.img}" onerror="this.src=''" alt=""/>`:`<div class="dash-thumb" style="display:flex;align-items:center;justify-content:center;font-size:18px;">🖼️</div>`}
+      <div class="dash-info">
+        <div class="dash-name">${i.title}</div>
+        <div class="dash-tool">${i.cat}</div>
+      </div>
+      <div style="display:flex;gap:5px;">
+        <button class="btn-edit" onclick="editItem(${i.id})">Edit</button>
+        <button class="btn-del" onclick="askDel(${i.id})">Hapus</button>
+      </div>
+    </div>`).join('')
+  :'<div style="text-align:center;padding:32px;color:var(--muted);">Belum ada konten</div>';
+}
+
+// ── RENDER LIST ──
+function renderList(){
+  const q=(document.getElementById('searchQ')?.value||'').toLowerCase();
+  const d=getData();
+  const f=q?d.filter(i=>i.title.toLowerCase().includes(q)||i.prompt.toLowerCase().includes(q)):d;
+  const list=document.getElementById('itemList');
+  const empty=document.getElementById('emptyWrap');
+  if(!f.length){list.innerHTML='';empty.style.display='flex';return;}
+  empty.style.display='none';
+  list.innerHTML=[...f].reverse().map(i=>{
+    const cls=catClass(i.cat);
+    return`<div class="item-row">
+      <div>${i.img?`<img class="item-thumb" src="${i.img}" onerror="this.style.display='none'" alt=""/>`:`<div class="item-thumb-ph">🖼️</div>`}</div>
+      <div style="min-width:0;"><div class="item-title">${i.title}</div><div class="item-prompt">${i.prompt}</div></div>
+      <div><span class="cat-badge ${cls}">${i.cat}</span></div>
+      <div class="item-prompt-cell">${i.prompt}</div>
+      <div class="action-cell">
+        <button class="btn-edit" onclick="editItem(${i.id})">Edit</button>
+        <button class="btn-del" onclick="askDel(${i.id})">Hapus</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function catClass(c){
+  if(c==='Chatgpt')return 'cat-chatgpt';
+  if(c==='Gemini')return 'cat-gemini';
+  if(c==='Midjourney')return 'cat-midj';
+  if(c==='Flux')return 'cat-flux';
+  if(c==='Firefly')return 'cat-firefly';
+  if(c==='Stable Diffusion')return 'cat-sd';
+  if(c==='Leonardo')return 'cat-leo';
+  return 'cat-other';
+}
+
+function refresh(){renderDash();if(curPage==='gallery')renderList();}
+
+// ── SHEET ──
+let editId=null, imgData=null;
+function openSheet(id=null){
+  editId=id; imgData=null;
+  resetForm();
+  if(id!==null){
+    const item=getData().find(i=>i.id===id);
+    if(item){
+      document.getElementById('sheetTitle').textContent='Edit Item';
+      document.getElementById('fId').value=id;
+      document.getElementById('fTitle').value=item.title;
+      document.getElementById('fCat').value=item.cat;
+      document.getElementById('fPrompt').value=item.prompt;
+      document.getElementById('fImgUrl').value=item.img||'';
+      document.getElementById('fCategory').value=item.category||'';
+      if(item.img)showPreview(item.img);
+    }
+  } else {
+    document.getElementById('sheetTitle').textContent='Tambah Item';
+  }
+  document.getElementById('sheetOverlay').classList.add('open');
+}
+function closeSheet(){document.getElementById('sheetOverlay').classList.remove('open');editId=null;imgData=null;resetForm();}
+function resetForm(){
+  ['fTitle','fCat','fCategory','fPrompt','fImgUrl','fId'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fileInp').value='';
+  imgData=null; hidePreview(); setUploadStatus('hide');
+}
+function saveItem(){
+  const title=document.getElementById('fTitle').value.trim();
+  const cat=document.getElementById('fCat').value;
+  const category=document.getElementById('fCategory').value;
+  const prompt=document.getElementById('fPrompt').value.trim();
+  const imgUrl=document.getElementById('fImgUrl').value.trim();
+  if(!title||!cat||!category||!prompt){toast('Isi semua field wajib!','err');return;}
+  const img=imgData||imgUrl||'';
+  const d=getData();
+  if(editId!==null){
+    const idx=d.findIndex(i=>i.id===editId);
+    if(idx!==-1)d[idx]={...d[idx],title,cat,category,prompt,img};
+    toast('Konten diupdate!','ok');
+  } else {
+    d.push({id:nextId(),title,cat,category,img,prompt});
+    toast('Konten ditambahkan!','ok');
+  }
+  setData(d);closeSheet();refresh();
+}
+
+// ── IMAGE ──
+async function onFileChange(e) {
+  const f = e.target.files[0]; if (!f) return;
+  if (f.size > 10 * 1024 * 1024) { toast('Ukuran max 10MB!', 'err'); return; }
+
+  // Tampilkan preview lokal dulu biar cepat
+  const reader = new FileReader();
+  reader.onload = ev => showPreview(ev.target.result);
+  reader.readAsDataURL(f);
+
+  // Tampilkan status uploading
+  setUploadStatus('uploading');
+
+  try {
+    const url = await uploadToCloudinary(f);
+    imgData = url;
+    document.getElementById('fImgUrl').value = url;
+    // Update preview pakai URL Cloudinary yang asli
+    document.getElementById('imgPrev').src = url;
+    setUploadStatus('done');
+    toast('✓ Tersimpan di Cloudinary!', 'ok');
+  } catch (err) {
+    setUploadStatus('error');
+    toast('Upload gagal: ' + err.message, 'err');
+    // Tetap pakai base64 lokal sebagai fallback
+    const r2 = new FileReader();
+    r2.onload = ev => { imgData = ev.target.result; document.getElementById('fImgUrl').value = ''; };
+    r2.readAsDataURL(f);
+  }
+}
+
+function setUploadStatus(state) {
+  const badge = document.getElementById('uploadStatusBadge');
+  if (!badge) return;
+  if (state === 'uploading') {
+    badge.style.display = 'flex';
+    badge.innerHTML = '<span style="animation:spin 1s linear infinite;display:inline-block;">⟳</span> Mengupload ke Cloudinary...';
+    badge.style.color = 'var(--info)';
+    badge.style.borderColor = 'rgba(91,156,246,.3)';
+  } else if (state === 'done') {
+    badge.style.display = 'flex';
+    badge.innerHTML = '✓ Tersimpan di Cloudinary';
+    badge.style.color = 'var(--success)';
+    badge.style.borderColor = 'rgba(74,222,128,.3)';
+    setTimeout(() => badge.style.display = 'none', 3000);
+  } else if (state === 'error') {
+    badge.style.display = 'flex';
+    badge.innerHTML = '✕ Cloudinary gagal · Pakai file lokal';
+    badge.style.color = 'var(--danger)';
+    badge.style.borderColor = 'rgba(255,82,82,.3)';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+function previewUrl(){
+  const u=document.getElementById('fImgUrl').value.trim();
+  if(u){imgData=null;showPreview(u);}else hidePreview();
+}
+function showPreview(src){
+  document.getElementById('imgPrev').src=src;
+  document.getElementById('uploadPh').style.display='none';
+  document.getElementById('prevWrap').style.display='block';
+  document.getElementById('uploadArea').classList.add('has-img');
+}
+function hidePreview(){
+  document.getElementById('imgPrev').src='';
+  document.getElementById('uploadPh').style.display='block';
+  document.getElementById('prevWrap').style.display='none';
+  document.getElementById('uploadArea').classList.remove('has-img');
+}
+function removeImg(e){e.preventDefault();e.stopPropagation();imgData=null;document.getElementById('fImgUrl').value='';document.getElementById('fileInp').value='';hidePreview();}
+
+// ── DELETE ──
+let delId=null;
+function editItem(id){openSheet(id);}
+function askDel(id){delId=id;document.getElementById('confOverlay').classList.add('open');}
+function closeConf(){document.getElementById('confOverlay').classList.remove('open');delId=null;}
+function confirmDel(){
+  if(delId===null)return;
+  setData(getData().filter(i=>i.id!==delId));
+  closeConf();refresh();toast('Dihapus!','ok');
+}
+
+// ── CLEAR ALL ──
+function askClear(){document.getElementById('confClearOverlay').classList.add('open');}
+function closeClearConf(){document.getElementById('confClearOverlay').classList.remove('open');}
+function confirmClear(){setData([]);closeClearConf();refresh();toast('Semua data dihapus!','ok');}
+
+// ── EXPORT ──
+function copyExport(){navigator.clipboard.writeText(JSON.stringify(getData(),null,2));toast('JSON dicopy!','ok');}
+function downloadJSON(){
+  const b=new Blob([JSON.stringify(getData(),null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='tisnaantzo-data.json';a.click();
+  toast('File didownload!','ok');
+}
+
+// ── TOAST ──
+function toast(msg,type='ok'){
+  const el=document.createElement('div');
+  el.className=`toast ${type}`;
+  el.textContent=(type==='ok'?'✓ ':'✕ ')+msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>el.remove(),2600);
+}
+
+// ── CLOSE ON OVERLAY ──
+document.getElementById('sheetOverlay').addEventListener('click',function(e){if(e.target===this)closeSheet();});
+document.getElementById('confOverlay').addEventListener('click',function(e){if(e.target===this)closeConf();});
+document.getElementById('confClearOverlay').addEventListener('click',function(e){if(e.target===this)closeClearConf();});
+
+// ── CLOUDINARY UI ──
+function loadCldConfig() {
+  const saved = JSON.parse(localStorage.getItem('tz_cld') || '{}');
+  if (saved.cloudName) {
+    CLD.cloudName = saved.cloudName;
+    CLD.uploadPreset = saved.uploadPreset || CLD.uploadPreset;
+  }
+  const n = document.getElementById('cldName');
+  const p = document.getElementById('cldPreset');
+  if (n) n.value = CLD.cloudName !== 'CLOUD_NAME_KAMU' ? CLD.cloudName : '';
+  if (p) p.value = CLD.uploadPreset;
+}
+
+function saveCldConfig() {
+  const name = document.getElementById('cldName').value.trim();
+  const preset = document.getElementById('cldPreset').value.trim();
+  if (!name || !preset) { showCldStatus('Isi Cloud Name dan Upload Preset!', 'err'); return; }
+  CLD.cloudName = name;
+  CLD.uploadPreset = preset;
+  localStorage.setItem('tz_cld', JSON.stringify({ cloudName: name, uploadPreset: preset }));
+  showCldStatus('✓ Config tersimpan!', 'ok');
+}
+
+async function testCldConnection() {
+  if (CLD.cloudName === 'CLOUD_NAME_KAMU') {
+    showCldStatus('Isi Cloud Name dulu!', 'err'); return;
+  }
+  showCldStatus('⟳ Testing koneksi...', 'info');
+  try {
+    const res = await fetch(`https://res.cloudinary.com/${CLD.cloudName}/image/upload/w_1,h_1/sample`);
+    if (res.ok || res.status === 200 || res.status === 404) {
+      showCldStatus('✓ Cloudinary terhubung! Cloud Name valid.', 'ok');
+    } else {
+      showCldStatus('✕ Cloud Name tidak ditemukan. Cek kembali!', 'err');
+    }
+  } catch {
+    showCldStatus('✕ Koneksi gagal. Cek internet kamu.', 'err');
+  }
+}
+
+function showCldStatus(msg, type) {
+  const el = document.getElementById('cldStatus');
+  if (!el) return;
+  el.style.display = 'block';
+  el.textContent = msg;
+  if (type === 'ok') { el.style.color = 'var(--success)'; el.style.borderColor = 'rgba(74,222,128,.3)'; el.style.background = 'rgba(74,222,128,.07)'; }
+  else if (type === 'err') { el.style.color = 'var(--danger)'; el.style.borderColor = 'rgba(255,82,82,.3)'; el.style.background = 'var(--danger-dim)'; }
+  else { el.style.color = 'var(--info)'; el.style.borderColor = 'rgba(91,156,246,.3)'; el.style.background = 'var(--info-dim)'; }
+}
+
+// ── INIT ──
+loadCldConfig();
+refresh();
+</script>
+</body>
+</html>
