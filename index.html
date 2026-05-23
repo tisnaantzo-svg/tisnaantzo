@@ -842,17 +842,16 @@
 </footer>
 
 <script type="module">
-  // ── FIREBASE CONFIG ──
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
   import { getFirestore, collection, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
   const firebaseConfig = {
-    apiKey: "AIzaSyAmIv86EktQmjRUPoqMvuZPTNqzI5K6wrA",
+    apiKey: "AIzaSyAmIv86EktQmjRUPoqM2SpSkzd031UnazU",
     authDomain: "tisnaantzo-605a2.firebaseapp.com",
     projectId: "tisnaantzo-605a2",
-    storageBucket: "tisnaantzo-605a2.appspot.com",
+    storageBucket: "tisnaantzo-605a2.firebasestorage.app",
     messagingSenderId: "471757399915",
-    appId: "1:471757399915:web:df776b8e3c2a1234abcdef",
+    appId: "1:471757399915:web:df776bfbada74ae9f9ce2e",
     measurementId: "G-B0V9F63WD3"
   };
 
@@ -899,17 +898,17 @@
   let activeFilter = 'all';
   const grid = document.getElementById('galleryGrid');
 
-  // ── FIRESTORE REALTIME LISTENER ──
+  // Load dari Firestore realtime
   const q = query(collection(db, 'prompts'), orderBy('id', 'asc'));
   onSnapshot(q, (snapshot) => {
     if (!snapshot.empty) {
-      items = snapshot.docs.map(doc => adminToGallery(doc.data()));
+      items = snapshot.docs.map(dc => adminToGallery(dc.data()));
     } else {
       items = [...FALLBACK_ITEMS];
     }
     renderCards(activeFilter);
   }, (err) => {
-    console.log('Firestore error, using fallback:', err);
+    console.log('Firestore error:', err);
     items = [...FALLBACK_ITEMS];
     renderCards(activeFilter);
   });
@@ -921,7 +920,7 @@
   }
 
   function renderCards(filter) {
-    items = loadItems();
+    // items updated by Firestore
     const filtered = filter === 'all' ? items : items.filter(i => i.category === filter);
     grid.innerHTML = '';
     updateStats(filtered);
@@ -1062,7 +1061,7 @@
     coffeeDropdown.classList.remove('open');
   });
 
-  // ── SYNC: Firebase handles real-time sync automatically ──
+  // Sync handled by Firestore realtime
 </script>
 </body>
 </html>
