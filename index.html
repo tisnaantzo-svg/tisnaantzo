@@ -779,11 +779,16 @@
   </div>
   <div class="filter-pills">
     <button class="pill active" data-filter="all">Semua</button>
-    <button class="pill" data-filter="travel">Travel Poster</button>
-    <button class="pill" data-filter="streetwear">Streetwear</button>
-    <button class="pill" data-filter="portrait">Portrait</button>
-    <button class="pill" data-filter="nature">Nature</button>
-    <button class="pill" data-filter="abstract">Abstract</button>
+    <button class="pill" data-filter="Chatgpt">ChatGPT</button>
+    <button class="pill" data-filter="Gemini">Gemini</button>
+    <button class="pill" data-filter="Midjourney">Midjourney</button>
+    <button class="pill" data-filter="Flux">Flux Pro</button>
+    <button class="pill" data-filter="Firefly">Firefly</button>
+    <button class="pill" data-filter="Ideogram">Ideogram</button>
+    <button class="pill" data-filter="Stable Diffusion">Stable Diff</button>
+    <button class="pill" data-filter="Leonardo">Leonardo</button>
+    <button class="pill" data-filter="Kling">Kling</button>
+    <button class="pill" data-filter="Runway">Runway</button>
   </div>
 </div>
 
@@ -925,7 +930,7 @@
 
   function renderCards(filter) {
     // items updated by Firestore
-    const filtered = filter === 'all' ? items : items.filter(i => i.category === filter);
+    const filtered = filter === 'all' ? items : items.filter(i => (i.cat||i.tool||'').toLowerCase().includes(filter.toLowerCase()));
     grid.innerHTML = '';
     updateStats(filtered);
 
