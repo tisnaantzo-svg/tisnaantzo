@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tisnaantzo — AI Prompt Collection</title>
+  <title>ATC Creative — AI Prompt Gallery</title>
   <meta name="description" content="Koleksi visual AI lengkap dengan prompt aslinya. Klik untuk copy prompt." />
   <meta name="author" content="Tisnaantzo" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -323,32 +323,7 @@
       border-color: var(--accent);
       color: #0a0a0a;
       font-weight: 700;
-      box-shadow: 0 0 16px var(--accent-glow);
     }
-    .pill:active { transform: scale(0.93); }
-
-    /* hero subtitle */
-    .hero-subtitle {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      letter-spacing: 0.3em;
-      color: var(--muted2);
-      margin-top: 6px;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-    }
-
-    /* nav logo override */
-    .nav-logo-text span { color: var(--accent); }
-
-    /* card active press */
-    .card:active { transform: scale(0.97) translateY(0) !important; }
-
-    /* copy btn press */
-    .copy-btn:active { transform: scale(0.9); }
-    .btn-copy-full:active { transform: scale(0.97); }
-    .coffee-btn:active { transform: scale(0.97); }
-    .pill { transition: all 0.18s cubic-bezier(0.34,1.56,0.64,1); }
 
     /* ── DIVIDER ── */
     .section-divider {
@@ -741,8 +716,8 @@
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">
-    <div class="nav-logo-mark">TZ</div>
-    <div class="nav-logo-text">tisna<span>antzo</span></div>
+    <div class="nav-logo-mark">ATC</div>
+    <div class="nav-logo-text">CREATIVE</div>
   </a>
   <div class="nav-right">
     <span class="nav-tag">AI PROMPTS</span>
@@ -751,12 +726,11 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-eyebrow">Prompt Collection</div>
+  <div class="hero-eyebrow">Visual Prompt Collection</div>
   <h1 class="hero-title">
-    ATC
-    <span class="line2">CREATIVE</span>
+    PROMPT
+    <span class="line2">GALLERY</span>
   </h1>
-  <div class="hero-subtitle">PROMPT COLLECTION</div>
   <p class="hero-sub">Koleksi visual AI lengkap dengan prompt aslinya. Klik kartu untuk lihat & copy prompt secara penuh.</p>
 
   <div class="hero-stats" id="heroStats">
@@ -803,22 +777,17 @@
   </div>
   <div class="filter-pills">
     <button class="pill active" data-filter="all">Semua</button>
-    <button class="pill" data-filter="Chatgpt">ChatGPT</button>
-    <button class="pill" data-filter="Gemini">Gemini</button>
-    <button class="pill" data-filter="Midjourney">Midjourney</button>
-    <button class="pill" data-filter="Flux">Flux Pro</button>
-    <button class="pill" data-filter="Firefly">Firefly</button>
-    <button class="pill" data-filter="Ideogram">Ideogram</button>
-    <button class="pill" data-filter="Stable Diffusion">Stable Diff</button>
-    <button class="pill" data-filter="Leonardo">Leonardo</button>
-    <button class="pill" data-filter="Kling">Kling</button>
-    <button class="pill" data-filter="Runway">Runway</button>
+    <button class="pill" data-filter="travel">Travel Poster</button>
+    <button class="pill" data-filter="streetwear">Streetwear</button>
+    <button class="pill" data-filter="portrait">Portrait</button>
+    <button class="pill" data-filter="nature">Nature</button>
+    <button class="pill" data-filter="abstract">Abstract</button>
   </div>
 </div>
 
 <div class="section-divider">
   <div class="divider-line"></div>
-  <div class="divider-text">tisnaantzo Library</div>
+  <div class="divider-text">ATC Creative Library</div>
   <div class="divider-line"></div>
 </div>
 
@@ -857,7 +826,7 @@
 <footer>
   <div class="footer-top">
     <div>
-      <div class="footer-brand">tisna<span>antzo</span></div>
+      <div class="footer-brand">ATC <span>CREATIVE</span></div>
       <div class="footer-tagline">AI Visual & Prompt Assets</div>
     </div>
     <nav class="footer-links">
@@ -867,13 +836,30 @@
     </nav>
   </div>
   <div class="footer-bottom">
-    <div class="footer-copy">© 2025 TISNAANTZO — ALL RIGHTS RESERVED</div>
+    <div class="footer-copy">© 2025 ATC CREATIVE — TISNAANTZO</div>
     <div class="footer-dot"></div>
   </div>
 </footer>
 
-<script>
-  // ── DATA — Ambil dari localStorage admin (tz_data), fallback ke data default ──
+<script type="module">
+  // ── FIREBASE CONFIG ──
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, collection, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAmIv86EktQmjRUPoqMvuZPTNqzI5K6wrA",
+    authDomain: "tisnaantzo-605a2.firebaseapp.com",
+    projectId: "tisnaantzo-605a2",
+    storageBucket: "tisnaantzo-605a2.appspot.com",
+    messagingSenderId: "471757399915",
+    appId: "1:471757399915:web:df776b8e3c2a1234abcdef",
+    measurementId: "G-B0V9F63WD3"
+  };
+
+  const fbApp = initializeApp(firebaseConfig);
+  const db = getFirestore(fbApp);
+
+  // ── DATA — Ambil dari Firestore real-time ──
   const FALLBACK_ITEMS = [
     { id:1, category:'travel', title:'Bali Sunset Poster', tool:'Midjourney v6.1', img:'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=600&q=80', tags:['Travel Poster','AI'], prompt:'A cinematic travel poster of Bali at golden hour sunset, silhouette of temple against dramatic orange-pink sky, rice terraces in foreground, vintage travel aesthetic, film grain, letterpress typography "BALI" at top, warm tones, high contrast, photorealistic, editorial style --ar 2:3 --v 6.1 --style raw' },
     { id:2, category:'streetwear', title:'Urban Streetwear Lookbook', tool:'Flux Pro 1.1', img:'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=600&q=80', tags:['Streetwear','AI'], prompt:'Editorial fashion photography, young Indonesian male model wearing oversized graphic hoodie and cargo pants, urban Jakarta background with graffiti walls, moody dramatic lighting, desaturated cinematic colors, street photography style, shot on film, authentic gritty aesthetic, 4k resolution --ar 3:4' },
@@ -909,22 +895,24 @@
     };
   }
 
-  function loadItems() {
-    try {
-      const raw = localStorage.getItem('tz_data');
-      if (raw) {
-        const adminData = JSON.parse(raw);
-        if (Array.isArray(adminData) && adminData.length > 0) {
-          return adminData.map(adminToGallery);
-        }
-      }
-    } catch(e) {}
-    return FALLBACK_ITEMS;
-  }
-
-  let items = loadItems();
+  let items = [...FALLBACK_ITEMS];
   let activeFilter = 'all';
   const grid = document.getElementById('galleryGrid');
+
+  // ── FIRESTORE REALTIME LISTENER ──
+  const q = query(collection(db, 'prompts'), orderBy('id', 'asc'));
+  onSnapshot(q, (snapshot) => {
+    if (!snapshot.empty) {
+      items = snapshot.docs.map(doc => adminToGallery(doc.data()));
+    } else {
+      items = [...FALLBACK_ITEMS];
+    }
+    renderCards(activeFilter);
+  }, (err) => {
+    console.log('Firestore error, using fallback:', err);
+    items = [...FALLBACK_ITEMS];
+    renderCards(activeFilter);
+  });
 
   function updateStats(filtered) {
     document.getElementById('statTotal').textContent = items.length;
@@ -934,7 +922,7 @@
 
   function renderCards(filter) {
     items = loadItems();
-    const filtered = filter === 'all' ? items : items.filter(i => (i.tool||'').toLowerCase().includes(filter.toLowerCase()) || (i.cat||'').toLowerCase().includes(filter.toLowerCase()));
+    const filtered = filter === 'all' ? items : items.filter(i => i.category === filter);
     grid.innerHTML = '';
     updateStats(filtered);
 
@@ -1074,13 +1062,7 @@
     coffeeDropdown.classList.remove('open');
   });
 
-  // ── SYNC ──
-  window.addEventListener('storage', (e) => {
-    if (e.key === 'tz_data') {
-      items = loadItems();
-      renderCards(activeFilter);
-    }
-  });
+  // ── SYNC: Firebase handles real-time sync automatically ──
 </script>
 </body>
 </html>
