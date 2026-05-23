@@ -710,6 +710,8 @@
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
   </style>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -841,24 +843,23 @@
   </div>
 </footer>
 
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import { getFirestore, collection, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+<script>
+  // ── FIREBASE INIT ──
+  try {
+    const firebaseConfig = {
+      apiKey: "AIzaSyAmIv86EktQmjRUPoqM2SpSkzd031UnazU",
+      authDomain: "tisnaantzo-605a2.firebaseapp.com",
+      projectId: "tisnaantzo-605a2",
+      storageBucket: "tisnaantzo-605a2.firebasestorage.app",
+      messagingSenderId: "471757399915",
+      appId: "1:471757399915:web:df776bfbada74ae9f9ce2e",
+      measurementId: "G-B0V9F63WD3"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    window._db = firebase.firestore();
+  } catch(e) { console.log('Firebase error:', e); }
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAmIv86EktQmjRUPoqM2SpSkzd031UnazU",
-    authDomain: "tisnaantzo-605a2.firebaseapp.com",
-    projectId: "tisnaantzo-605a2",
-    storageBucket: "tisnaantzo-605a2.firebasestorage.app",
-    messagingSenderId: "471757399915",
-    appId: "1:471757399915:web:df776bfbada74ae9f9ce2e",
-    measurementId: "G-B0V9F63WD3"
-  };
-
-  const fbApp = initializeApp(firebaseConfig);
-  const db = getFirestore(fbApp);
-
-  // ── DATA — Ambil dari Firestore real-time ──
+  // ── DATA — Ambil dari Firestore, fallback localStorage ──
   const FALLBACK_ITEMS = [
     { id:1, category:'travel', title:'Bali Sunset Poster', tool:'Midjourney v6.1', img:'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=600&q=80', tags:['Travel Poster','AI'], prompt:'A cinematic travel poster of Bali at golden hour sunset, silhouette of temple against dramatic orange-pink sky, rice terraces in foreground, vintage travel aesthetic, film grain, letterpress typography "BALI" at top, warm tones, high contrast, photorealistic, editorial style --ar 2:3 --v 6.1 --style raw' },
     { id:2, category:'streetwear', title:'Urban Streetwear Lookbook', tool:'Flux Pro 1.1', img:'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=600&q=80', tags:['Streetwear','AI'], prompt:'Editorial fashion photography, young Indonesian male model wearing oversized graphic hoodie and cargo pants, urban Jakarta background with graffiti walls, moody dramatic lighting, desaturated cinematic colors, street photography style, shot on film, authentic gritty aesthetic, 4k resolution --ar 3:4' },
@@ -899,19 +900,22 @@
   const grid = document.getElementById('galleryGrid');
 
   // Load dari Firestore realtime
-  const q = query(collection(db, 'prompts'), orderBy('id', 'asc'));
-  onSnapshot(q, (snapshot) => {
-    if (!snapshot.empty) {
-      items = snapshot.docs.map(dc => adminToGallery(dc.data()));
-    } else {
+  if (window._db) {
+    window._db.collection('prompts').orderBy('id','asc').onSnapshot((snapshot) => {
+      if (!snapshot.empty) {
+        items = snapshot.docs.map(dc => adminToGallery(dc.data()));
+      } else {
+        items = [...FALLBACK_ITEMS];
+      }
+      renderCards(activeFilter);
+    }, (err) => {
+      console.log('Firestore error, fallback:', err);
       items = [...FALLBACK_ITEMS];
-    }
-    renderCards(activeFilter);
-  }, (err) => {
-    console.log('Firestore error:', err);
-    items = [...FALLBACK_ITEMS];
-    renderCards(activeFilter);
-  });
+      renderCards(activeFilter);
+    });
+  } else {
+    renderCards('all');
+  }
 
   function updateStats(filtered) {
     document.getElementById('statTotal').textContent = items.length;
@@ -1061,7 +1065,7 @@
     coffeeDropdown.classList.remove('open');
   });
 
-  // Sync handled by Firestore realtime
+  // Sync handled by Firestore
 </script>
 </body>
 </html>
